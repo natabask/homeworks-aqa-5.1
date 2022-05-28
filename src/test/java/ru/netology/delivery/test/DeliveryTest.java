@@ -1,7 +1,9 @@
 package ru.netology.delivery.test;
 
-import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.BeforeEach;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 import ru.netology.delivery.data.DataGenerator;
@@ -15,10 +17,19 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class DeliveryTest {
 
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
+    }
+
     @Test
     public void shouldChangeDeliveryDate() {
         open("http://localhost:9999");
-        Configuration.holdBrowserOpen = true;
         var daysToAddForFirstMeeting = 4;
         var firstMeetingDate = DataGenerator.generateDate(daysToAddForFirstMeeting);
         var daysToAddForSecondMeeting = 7;
